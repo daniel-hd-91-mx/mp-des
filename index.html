@@ -1,1 +1,360 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mapa Rápido para Salir de la Zona de Desgaste</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&family=Source+Serif+Pro:wght@400;900&display=swap');
+        
+        body {
+            background-color: #f9fafb;
+        }
+        .font-serif { 
+            font-family: 'Source Serif Pro', serif; 
+        }
+        .font-sans { 
+            font-family: 'Open Sans', sans-serif; 
+        }
+        
+        .slider-track {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 100%;
+            height: 8px;
+            border-radius: 9999px;
+            cursor: pointer;
+        }
 
+        .slider-track::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 16px;
+            height: 16px;
+            background: #f9442c;
+            cursor: pointer;
+            border-radius: 50%;
+            margin-top: -4px;
+            border: 3px solid black;
+        }
+
+        .slider-track::-moz-range-thumb {
+            width: 16px;
+            height: 16px;
+            background: #f9442c;
+            cursor: pointer;
+            border-radius: 50%;
+            border: 3px solid black;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="app" class="mx-auto max-w-md p-4 space-y-6 font-sans">
+        
+        <img src="https://raw.githubusercontent.com/daniel-hd-91-mx/mp-des/main/Logo-Dan-Hd_Imagotipo-BLACK.png" alt="Logo" class="mx-auto w-[250px] pt-4" />
+
+        <!-- Form View -->
+        <div id="form-view">
+            <div class="border bg-white text-gray-800 shadow-sm rounded-lg">
+                <div class="p-6">
+                    <h1 class="text-2xl text-center font-extrabold font-serif leading-tight mb-4">Tu Mapa Rápido para Salir de la Zona de Desgaste</h1>
+                    <p class="text-sm font-sans text-center">En menos de 3 minutos descubres dónde estás y recibes un plan rápido para recuperar energía y claridad.</p>
+                    <hr class="my-6 border-gray-200" />
+                    <p class="text-base text-center font-bold font-serif mb-6">Responde las siguientes preguntas, tomando en cuenta tus últimos 3 meses.</p>
+                    
+                    <div class="space-y-6">
+                        <!-- ARC Slider -->
+                        <div>
+                            <p class="text-base text-center font-medium font-serif mb-2">¿En qué proporción las situaciones emergentes desplazan tus actividades directivas?</p>
+                            <p id="compArcDisplay" class="text-xs mt-4 opacity-80 font-sans">% de actividades de tu rol directivo: <span class="font-semibold">100%</span></p>
+                            <p class="text-xs mt-1 opacity-90 font-sans">% de urgencias (actividades) que no delegas: <span id="arcValueDisplay" style="color: #f9442c;" class="font-semibold">0%</span></p>
+                            <div class="mt-2">
+                                <input id="arcSlider" type="range" min="0" max="100" step="1" value="0" class="slider-track" />
+                            </div>
+                        </div>
+                        <hr class="border-gray-200" />
+                        <!-- CE Slider -->
+                        <div>
+                            <p class="text-base text-center font-medium font-serif mb-2">¿En qué proporción resuelves problemas de otros en lugar de dirigir?</p>
+                            <p id="compCeDisplay" class="text-xs mt-4 opacity-80 font-sans">% de horas en tu rol directivo: <span class="font-semibold">100%</span></p>
+                            <p class="text-xs mt-1 opacity-90 font-sans">% de horas resolviendo por otros: <span id="ceValueDisplay" style="color: #f9442c;" class="font-semibold">0%</span></p>
+                            <div class="mt-2">
+                                <input id="ceSlider" type="range" min="0" max="100" step="1" value="0" class="slider-track" />
+                            </div>
+                        </div>
+                        <hr class="border-gray-200" />
+                        <!-- SP Slider -->
+                        <div>
+                            <p class="text-base text-center font-medium font-serif mb-2">¿En qué proporción distribuyes tu tiempo entre tu negocio y familia?</p>
+                            <p id="compSpDisplay" class="text-xs mt-4 opacity-80 font-sans">% de horas de vida personal: <span class="font-semibold">100%</span></p>
+                            <p class="text-xs mt-1 opacity-90 font-sans">% de horas dedicadas al trabajo: <span id="spValueDisplay" style="color: #f9442c;" class="font-semibold">0%</span></p>
+                            <div class="mt-2">
+                                <input id="spSlider" type="range" min="0" max="100" step="1" value="0" class="slider-track" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="border bg-white text-gray-800 shadow-sm rounded-lg mt-6">
+                <div class="p-6 text-center text-sm font-sans">
+                    <p>⛓️‍💥 Deja de ser esclavo de tu negocio</p>
+                    <p>🥰 Disfruta a tu familia y tu vida</p>
+                </div>
+            </div>
+            <button id="verResultadoBtn" class="w-full mt-6 inline-flex items-center justify-center rounded-md text-sm font-medium h-10 px-4 py-2" style="background-color: #f9442c; color: white;">Ver mi resultado</button>
+        </div>
+
+        <!-- Result View (hidden by default) -->
+        <div id="result-view" class="hidden">
+             <div class="border bg-white text-gray-800 shadow-sm rounded-lg text-center">
+                <div class="p-6 space-y-2">
+                    <h2 id="resultTitulo" class="text-2xl font-bold font-serif" style="color: #f9442c;"></h2>
+                    <p class="text-sm text-gray-600">Nivel de Esclavitud al Negocio (NEN): <strong id="resultNen" class="text-black"></strong></p>
+                    <p id="resultMensaje" class="font-semibold pt-2"></p>
+                    <p id="resultDetalle"></p>
+                </div>
+            </div>
+            <div class="space-y-3 pt-4">
+                <button id="downloadPdfBtn" class="w-full inline-flex items-center justify-center rounded-md text-sm font-medium h-10 px-4 py-2" style="background-color: #f9442c; color: white;">Descargar mi Mapa Personalizado</button>
+                <button id="resetBtn" class="w-full bg-transparent text-gray-800 border border-gray-300 hover:bg-gray-100 inline-flex items-center justify-center rounded-md text-sm font-medium h-10 px-4 py-2">Reiniciar actividad</button>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- State Variables ---
+            let arc = 0;
+            let ce = 0;
+            let sp = 0;
+            let result = null;
+            let jsPdfLoaded = false;
+            const LOGO = "https://raw.githubusercontent.com/daniel-hd-91-mx/mp-des/main/Logo-Dan-Hd_Imagotipo-BLACK.png";
+
+            // --- DOM Elements ---
+            const formView = document.getElementById('form-view');
+            const resultView = document.getElementById('result-view');
+            
+            const arcSlider = document.getElementById('arcSlider');
+            const ceSlider = document.getElementById('ceSlider');
+            const spSlider = document.getElementById('spSlider');
+
+            const arcValueDisplay = document.getElementById('arcValueDisplay');
+            const ceValueDisplay = document.getElementById('ceValueDisplay');
+            const spValueDisplay = document.getElementById('spValueDisplay');
+
+            const compArcDisplay = document.getElementById('compArcDisplay').querySelector('span');
+            const compCeDisplay = document.getElementById('compCeDisplay').querySelector('span');
+            const compSpDisplay = document.getElementById('compSpDisplay').querySelector('span');
+            
+            const verResultadoBtn = document.getElementById('verResultadoBtn');
+            const downloadPdfBtn = document.getElementById('downloadPdfBtn');
+            const resetBtn = document.getElementById('resetBtn');
+
+            // --- Load jsPDF ---
+            const script = document.createElement('script');
+            script.src = 'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js';
+            script.async = true;
+            script.onload = () => { jsPdfLoaded = true; };
+            document.body.appendChild(script);
+
+            // --- Functions ---
+            const updateSliderTrack = (slider) => {
+                const percentage = ((slider.value - slider.min) * 100) / (slider.max - slider.min);
+                slider.style.background = `linear-gradient(to right, #f9442c ${percentage}%, #e5e7eb ${percentage}%)`;
+            };
+
+            const clasificar = (nen) => {
+                if (nen >= 70) return { titulo: "Esclavitud Crítica", mensaje: "Tu negocio dicta tu vida. Estás en riesgo de colapso físico, emocional y relacional.", detalle: "Tu negocio gobierna tu vida. Estás atrapado en urgencias, resolviendo por otros y sacrificando tu vida personal en exceso." };
+                if (nen >= 40) return { titulo: "Esclavitud Moderada", mensaje: "Equilibrio frágil: estás en el momento ideal para hacer ajustes y evitar escalar.", detalle: "Tu situación es manejable, pero ya muestra señales de absorción excesiva del negocio." };
+                return { titulo: "Liderazgo Libre", mensaje: "Diriges con equilibrio. El reto es sostenerlo y crecer sin recaer.", detalle: "Has logrado un balance sano entre rol directivo, delegación y vida personal." };
+            };
+            
+            const generarPDF = () => {
+                if (!jsPdfLoaded || !window.jspdf) {
+                    console.warn("La librería PDF no ha cargado. Por favor, intente de nuevo en un momento.");
+                    return;
+                }
+                const { jsPDF } = window.jspdf;
+                const doc = new jsPDF({ unit: "pt", format: "a4" });
+                const pageW = doc.internal.pageSize.getWidth();
+                const margin = 36, lh = 18;
+                const maxW = pageW - (margin * 2); 
+                let y = 64;
+
+                const logoWidth = 250;
+                const logoX = (pageW - logoWidth) / 2;
+                try { doc.addImage(LOGO, "PNG", logoX, y, logoWidth, 0, undefined, 'FAST'); y += 120; } catch (e) { console.error("Error loading logo for PDF:", e); }
+
+                const add = (t, f=12, b=false, face = 'helvetica', align = 'left') => {
+                    doc.setFontSize(f); doc.setFont(face, b? 'bold':'normal');
+                    const lines = doc.splitTextToSize(t, maxW);
+                    const xPos = align === 'center' ? pageW / 2 : margin;
+                    if (y + lines.length*lh > doc.internal.pageSize.getHeight() - 64) { doc.addPage(); y = 64; }
+                    doc.text(lines, xPos, y, { align });
+                    y += lines.length*lh + 6;
+                };
+                
+                doc.setFontSize(20); doc.setFont('times', 'bold');
+                doc.text("Tu Mapa Rápido para Salir de la Zona de Desgaste", pageW / 2, y, { align: 'center' });
+                y += 20 + 6; 
+
+                doc.setFontSize(12); doc.setFont('helvetica', 'normal');
+                doc.text("Un plan simple para recuperar energía, claridad y equilibrio en tu negocio y tu vida.", pageW / 2, y, { align: 'center' });
+                y += 12 + 18;
+                
+                add("La zona de desgaste no es agotamiento total ni plenitud. Es esa franja gris en la que trabajas, pero te cuesta disfrutar tu vida y mantener claridad. Este informe traduce tus respuestas en un mapa rápido: dónde estás hoy y qué puedes hacer para recuperar energía y dirección.");
+                
+                y += 12;
+                doc.setDrawColor(220, 220, 220); doc.setLineWidth(1);
+                doc.line(margin, y, pageW - margin, y);
+                y += 24;
+
+                const nen = Math.round((arc + ce + sp) / 3);
+                const nivel = result ?? { nen, ...clasificar(nen) };
+
+                const renderColoredResults = () => {
+                    doc.setFontSize(12); doc.setFont('helvetica', 'normal');
+                    const line = `Urgencias: ${arc}%  |  Resolver por otros: ${ce}%  |  Trabajo vs vida: ${sp}%`;
+                    const totalWidth = doc.getStringUnitWidth(line) * doc.getFontSize();
+                    const startX = (pageW - totalWidth) / 2;
+                    let currentX = startX;
+                    const printSegment = (text, isHigh) => {
+                        doc.setTextColor(isHigh ? 249 : 0, isHigh ? 68 : 0, isHigh ? 44 : 0);
+                        doc.text(text, currentX, y);
+                        currentX += doc.getStringUnitWidth(text) * doc.getFontSize();
+                    };
+                    printSegment("Urgencias: ", false); printSegment(`${arc}%`, arc >= 70);
+                    printSegment("  |  Resolver por otros: ", false); printSegment(`${ce}%`, ce >= 70);
+                    printSegment("  |  Trabajo vs vida: ", false); printSegment(`${sp}%`, sp >= 70);
+                    doc.setTextColor(0, 0, 0); 
+                    y += lh + 6;
+                };
+                renderColoredResults();
+                
+                add(`Nivel: ${nivel.titulo} · NEN: ${nivel.nen}%`, 12, false, 'helvetica', 'center');
+                add(nivel.mensaje);
+                add(nivel.detalle);
+
+                y += 24;
+                const headerText = "Mapa de Acción · 3 pasos para esta semana";
+                doc.setFontSize(16); doc.setFont('times', 'bold');
+                doc.text(headerText, margin, y);
+                const textWidth = doc.getStringUnitWidth(headerText) * doc.getFontSize();
+                doc.setLineWidth(1);
+                doc.line(margin, y + 3, margin + textWidth, y + 3);
+                y += lh * 1.5;
+
+                const addActionSection = (title, actionText, questionText) => {
+                    if (y + 120 > doc.internal.pageSize.getHeight() - 64) { doc.addPage(); y = 64; }
+                    doc.setFontSize(12); doc.setFont('helvetica', 'bold');
+                    doc.text(title, margin, y);
+                    y += lh * 1.5;
+                    doc.setFont('helvetica', 'normal');
+                    let lines = doc.splitTextToSize(actionText, maxW);
+                    doc.text(lines, margin, y);
+                    y += lines.length * lh + 6;
+                    const questionLine = `Pregunta reflexiva: “${questionText}”`;
+                    lines = doc.splitTextToSize(questionLine, maxW);
+                    doc.text(lines, margin, y);
+                    y += lines.length * lh + 24;
+                };
+                
+                let arcAction, arcQuestion;
+                if (arc > 70) { arcAction = "Haz una lista de las urgencias del último mes. Escribe quién podía resolverlas y por qué terminaste haciéndolo tú."; arcQuestion = "¿Eres tú quien las busca, o es tu patrón de control el que no suelta?"; }
+                else if (arc >= 40) { arcAction = "Reserva 30 minutos diarios solo para actividades estratégicas. Bloquéalo en tu agenda como cita inamovible."; arcQuestion = "¿Defendiste ese espacio o lo regalaste a lo urgente?"; }
+                else { arcAction = "Documenta cómo resolviste tu última urgencia y entrégalo a quien deba manejarla la próxima vez. No intervengas, observa."; arcQuestion = "¿Notas confianza en tu equipo… o en ti mismo al soltar?"; }
+                addActionSection("Acción #1 (Urgencias)", arcAction, arcQuestion);
+
+                let ceAction, ceQuestion;
+                if (ce > 70) { ceAction = "Elige una tarea que siempre terminas haciendo por tu equipo. Esta semana entrégala de principio a fin. No la retomes aunque no salga perfecta."; ceQuestion = "¿Quieres ser indispensable o prefieres ser libre?"; }
+                else if (ce >= 40) { ceAction = "Haz una lista de tres actividades que hiciste en lugar de tu equipo. Suelta una esta semana. Acompaña con retroalimentación, pero no ejecutes tú la tarea."; ceQuestion = "¿Qué pesa más en ti: miedo a que fallen o miedo a dejar de sentirte necesario?"; }
+                else { ceAction = "Cada mes registra qué decisiones tomó tu equipo sin ti. Reconócelas públicamente y pregúntales."; ceQuestion = "¿Qué más necesitan para seguir decidiendo solos?"; }
+                addActionSection("Acción #2 (Resolver por otros)", ceAction, ceQuestion);
+
+                let spAction, spQuestion;
+                if (sp > 70) { spAction = "Bloquea una hora a mitad de la semana y nómbrala: Hora Vital. Protégela como si fuera tu cita más importante."; spQuestion = "¿Qué me cuesta más, sostener esa hora… o aceptar que mi vida vale tanto como mi empresa?"; }
+                else if (sp >= 40) { spAction = "Crea un ritual de cierre diario. Escribe el último pendiente, apaga tu computadora y da una caminata de 10 minutos. Hazlo por una semana."; spQuestion = "¿Qué cambia en tu descanso cuando honras ese cierre?"; }
+                else { spAction = "Agenda una actividad mensual solo por disfrute (hobby, experiencia, viaje corto). Ponla antes que tus juntas en el calendario."; spQuestion = "¿Puedes disfrutarla sin sentir culpa?"; }
+                addActionSection("Acción #3 (Trabajo vs Vida)", spAction, spQuestion);
+                
+                y += 12;
+                const cierreText = "Este mapa no es teoría: son pasos reales que puedes aplicar de inmediato. El desgaste no define quién eres; lo importante es salir a tiempo y sostener el equilibrio.";
+                doc.setFontSize(12); doc.setFont('helvetica', 'normal');
+                const cierreLines = doc.splitTextToSize(cierreText, maxW - 80);
+                
+                let maxWidth = 0;
+                cierreLines.forEach(line => { const lineWidth = doc.getTextWidth(line); if (lineWidth > maxWidth) maxWidth = lineWidth; });
+
+                const padding = 15;
+                const rectH = (cierreLines.length * (lh - 4)) + (2 * padding);
+                const rectW = maxWidth + (2 * padding);
+                const rectX = (pageW - rectW) / 2;
+                const rectY = y;
+
+                doc.setDrawColor(249, 68, 44); doc.setLineWidth(3);
+                doc.rect(rectX, rectY, rectW, rectH);
+                doc.setTextColor(0,0,0);
+                doc.text(cierreLines, pageW / 2, y + padding + 6, { align: 'center' });
+
+                doc.save("Mapa_Rapido_Zona_Desgaste.pdf");
+            };
+
+            // --- Event Listeners ---
+            arcSlider.addEventListener('input', (e) => {
+                arc = Number(e.target.value);
+                arcValueDisplay.textContent = `${arc}%`;
+                compArcDisplay.textContent = `${100 - arc}%`;
+                updateSliderTrack(e.target);
+            });
+            ceSlider.addEventListener('input', (e) => {
+                ce = Number(e.target.value);
+                ceValueDisplay.textContent = `${ce}%`;
+                compCeDisplay.textContent = `${100 - ce}%`;
+                updateSliderTrack(e.target);
+            });
+            spSlider.addEventListener('input', (e) => {
+                sp = Number(e.target.value);
+                spValueDisplay.textContent = `${sp}%`;
+                compSpDisplay.textContent = `${100 - sp}%`;
+                updateSliderTrack(e.target);
+            });
+            
+            verResultadoBtn.addEventListener('click', () => {
+                const nen = Math.round((arc + ce + sp) / 3);
+                result = { nen, ...clasificar(nen) };
+                
+                document.getElementById('resultTitulo').textContent = result.titulo;
+                document.getElementById('resultNen').textContent = `${result.nen}%`;
+                document.getElementById('resultMensaje').textContent = result.mensaje;
+                document.getElementById('resultDetalle').textContent = result.detalle;
+                
+                formView.classList.add('hidden');
+                resultView.classList.remove('hidden');
+            });
+
+            downloadPdfBtn.addEventListener('click', generarPDF);
+
+            resetBtn.addEventListener('click', () => {
+                arc = 0; ce = 0; sp = 0; result = null;
+                arcSlider.value = 0; ceSlider.value = 0; spSlider.value = 0;
+                
+                arcSlider.dispatchEvent(new Event('input'));
+                ceSlider.dispatchEvent(new Event('input'));
+                spSlider.dispatchEvent(new Event('input'));
+                
+                resultView.classList.add('hidden');
+                formView.classList.remove('hidden');
+            });
+            
+            // Initial slider track color
+            updateSliderTrack(arcSlider);
+            updateSliderTrack(ceSlider);
+            updateSliderTrack(spSlider);
+        });
+    </script>
+</body>
+</html>
