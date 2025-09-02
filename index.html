@@ -93,6 +93,7 @@
                             <div class="mt-2">
                                 <input id="spSlider" type="range" min="0" max="100" step="1" value="0" class="slider-track" />
                             </div>
+                            <p class="text-[11px] mt-1 opacity-70 font-sans italic">*Esta respuesta influye más en tu resultado final.</p>
                         </div>
                     </div>
                 </div>
@@ -113,7 +114,7 @@
                     <h2 id="resultTitulo" class="text-2xl font-bold font-serif" style="color: #f9442c;"></h2>
                     <p class="text-sm text-gray-600">Nivel de Esclavitud al Negocio (NEN): <strong id="resultNen" class="text-black"></strong></p>
                     <p id="resultMensaje" class="font-semibold pt-2"></p>
-                    <p id="resultDetalle"></p>
+                    <img src="https://raw.githubusercontent.com/daniel-hd-91-mx/mp-des/main/comparte.png" alt="Comparte tu resultado" class="mx-auto w-[250px] pt-2">
                 </div>
             </div>
             <div class="space-y-3 pt-4">
@@ -133,6 +134,7 @@
             let result = null;
             let jsPdfLoaded = false;
             const LOGO = "https://raw.githubusercontent.com/daniel-hd-91-mx/mp-des/main/Logo-Dan-Hd_Imagotipo-BLACK.png";
+            const SHARE_IMG = "https://raw.githubusercontent.com/daniel-hd-91-mx/mp-des/main/comparte.png";
 
             // --- DOM Elements ---
             const formView = document.getElementById('form-view');
@@ -167,10 +169,30 @@
                 slider.style.background = `linear-gradient(to right, #f9442c ${percentage}%, #e5e7eb ${percentage}%)`;
             };
 
-            const clasificar = (nen) => {
-                if (nen >= 70) return { titulo: "Esclavitud Crítica", mensaje: "Tu negocio dicta tu vida. Estás en riesgo de colapso físico, emocional y relacional.", detalle: "Tu negocio gobierna tu vida. Estás atrapado en urgencias, resolviendo por otros y sacrificando tu vida personal en exceso." };
-                if (nen >= 40) return { titulo: "Esclavitud Moderada", mensaje: "Equilibrio frágil: estás en el momento ideal para hacer ajustes y evitar escalar.", detalle: "Tu situación es manejable, pero ya muestra señales de absorción excesiva del negocio." };
-                return { titulo: "Liderazgo Libre", mensaje: "Diriges con equilibrio. El reto es sostenerlo y crecer sin recaer.", detalle: "Has logrado un balance sano entre rol directivo, delegación y vida personal." };
+            const clasificar = (arc, ce, sp, nen) => {
+                const highs = [arc, ce, sp].filter(v => v >= 70).length;
+
+                if (nen >= 70 || highs >= 2 || (sp >= 70 && arc >= 60)) {
+                    return {
+                    titulo: "Esclavitud Crítica",
+                    mensaje: "Tu negocio dicta tu vida. Estás en riesgo de colapso físico, emocional y relacional.",
+                    detalle: "Tu negocio gobierna tu vida. Estás atrapado en urgencias, resolviendo por otros y sacrificando tu vida personal en exceso."
+                    };
+                }
+
+                if (nen >= 40 || [arc, ce, sp].some(v => v >= 70)) {
+                    return {
+                    titulo: "Esclavitud Moderada",
+                    mensaje: "Equilibrio frágil: estás en el momento ideal para hacer ajustes y evitar escalar.",
+                    detalle: "Tu situación es manejable, pero ya muestra señales de absorción excesiva del negocio."
+                    };
+                }
+
+                return {
+                    titulo: "Liderazgo Libre",
+                    mensaje: "Diriges con equilibrio. El reto es sostenerlo y crecer sin recaer.",
+                    detalle: "Has logrado un balance sano entre rol directivo, delegación y vida personal."
+                };
             };
             
             const generarPDF = () => {
@@ -213,8 +235,8 @@
                 doc.line(margin, y, pageW - margin, y);
                 y += 24;
 
-                const nen = Math.round((arc + ce + sp) / 3);
-                const nivel = result ?? { nen, ...clasificar(nen) };
+                const nen = Math.round((arc + ce + 3*sp) / 5);
+                const nivel = result ?? { nen, ...clasificar(arc, ce, sp, nen) };
 
                 const renderColoredResults = () => {
                     doc.setFontSize(12); doc.setFont('helvetica', 'normal');
@@ -299,6 +321,25 @@
                 doc.rect(rectX, rectY, rectW, rectH);
                 doc.setTextColor(0,0,0);
                 doc.text(cierreLines, pageW / 2, y + padding + 6, { align: 'center' });
+                y += rectH + 24;
+
+                const shareImgWidth = 250;
+                const shareImgX = (pageW - shareImgWidth) / 2;
+                if (y + 100 > doc.internal.pageSize.getHeight() - 64) { doc.addPage(); y = 64; }
+                try {
+                    doc.addImage(SHARE_IMG, "PNG", shareImgX, y, shareImgWidth, 0, undefined, 'FAST');
+                } catch (e) { console.error("Error loading share image for PDF:", e); }
+
+                const totalPages = doc.internal.getNumberOfPages();
+                for (let i = 1; i <= totalPages; i++) {
+                    doc.setPage(i);
+                    doc.setFontSize(10);
+                    doc.setTextColor(150);
+                    const pageText = `${i} / ${totalPages}`;
+                    const textX = pageW / 2;
+                    const textY = doc.internal.pageSize.getHeight() - 20;
+                    doc.text(pageText, textX, textY, { align: 'center' });
+                }
 
                 doc.save("Mapa_Rapido_Zona_Desgaste.pdf");
             };
@@ -324,13 +365,12 @@
             });
             
             verResultadoBtn.addEventListener('click', () => {
-                const nen = Math.round((arc + ce + sp) / 3);
-                result = { nen, ...clasificar(nen) };
+                const nen = Math.round((arc + ce + 3*sp) / 5);
+                result = { nen, ...clasificar(arc, ce, sp, nen) };
                 
                 document.getElementById('resultTitulo').textContent = result.titulo;
                 document.getElementById('resultNen').textContent = `${result.nen}%`;
                 document.getElementById('resultMensaje').textContent = result.mensaje;
-                document.getElementById('resultDetalle').textContent = result.detalle;
                 
                 formView.classList.add('hidden');
                 resultView.classList.remove('hidden');
