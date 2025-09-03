@@ -30,18 +30,18 @@
         .slider-track::-webkit-slider-thumb {
             -webkit-appearance: none;
             appearance: none;
-            width: 16px;
-            height: 16px;
+            width: 24px;
+            height: 24px;
             background: #f9442c;
             cursor: pointer;
             border-radius: 50%;
-            margin-top: -4px;
+            margin-top: -8px;
             border: 3px solid black;
         }
 
         .slider-track::-moz-range-thumb {
-            width: 16px;
-            height: 16px;
+            width: 24px;
+            height: 24px;
             background: #f9442c;
             cursor: pointer;
             border-radius: 50%;
@@ -58,40 +58,77 @@
         <!-- Form View -->
         <div id="form-view">
             <div class="border bg-white text-gray-800 shadow-sm rounded-lg">
-                <div class="p-6">
-                    <h1 class="text-2xl text-center font-extrabold font-serif leading-tight mb-4">Tu Mapa Rápido para Salir de la Zona de Desgaste</h1>
+                <div class="p-6 relative">
+                    <!-- Icono de Información -->
+                    <div id="infoIcon" class="absolute top-4 left-4 cursor-pointer">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-400 hover:text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                    </div>
+
+                    <h1 class="text-2xl text-center font-extrabold font-serif leading-tight mb-4 mt-8">Tu Mapa Rápido para Salir de la Zona de Desgaste</h1>
                     <p class="text-sm font-sans text-center">En menos de 3 minutos descubres dónde estás y recibes un plan rápido para recuperar energía y claridad.</p>
                     <hr class="my-6 border-gray-200" />
                     <p class="text-base text-center font-bold font-serif mb-6">Responde las siguientes preguntas, tomando en cuenta tus últimos 3 meses.</p>
                     
-                    <div class="space-y-6">
+                    <div class="space-y-8">
                         <!-- ARC Slider -->
                         <div>
                             <p class="text-base text-center font-medium font-serif mb-2">¿En qué proporción las situaciones emergentes desplazan tus actividades directivas?</p>
-                            <p id="compArcDisplay" class="text-xs mt-4 opacity-80 font-sans">% de actividades de tu rol directivo: <span class="font-semibold">100%</span></p>
-                            <p class="text-xs mt-1 opacity-90 font-sans">% de urgencias (actividades) que no delegas: <span id="arcValueDisplay" style="color: #f9442c;" class="font-semibold">0%</span></p>
-                            <div class="mt-2">
-                                <input id="arcSlider" type="range" min="0" max="100" step="1" value="0" class="slider-track" />
+                            <div class="mt-4">
+                                <input id="arcSlider" type="range" min="0" max="100" step="1" value="50" class="slider-track" />
+                            </div>
+                            <div class="flex justify-between text-xs mt-2">
+                                <div class="text-left">
+                                    <p class="opacity-90 font-sans leading-tight">% de urgencias (actividades)</p>
+                                    <p class="opacity-90 font-sans text-[11px] leading-tight">que no delegas:</p>
+                                    <p><span id="arcValueDisplay" style="color: #f9442c;" class="font-semibold text-lg">50%</span></p>
+                                </div>
+                                <div class="text-right">
+                                    <p class="opacity-80 font-sans leading-tight">% de actividades</p>
+                                    <p class="opacity-80 font-sans text-[11px] leading-tight">de tu rol directivo:</p>
+                                    <p><span id="compArcDisplay" class="font-semibold text-lg">50%</span></p>
+                                </div>
                             </div>
                         </div>
                         <hr class="border-gray-200" />
                         <!-- CE Slider -->
                         <div>
                             <p class="text-base text-center font-medium font-serif mb-2">¿En qué proporción resuelves problemas de otros en lugar de dirigir?</p>
-                            <p id="compCeDisplay" class="text-xs mt-4 opacity-80 font-sans">% de horas en tu rol directivo: <span class="font-semibold">100%</span></p>
-                            <p class="text-xs mt-1 opacity-90 font-sans">% de horas resolviendo por otros: <span id="ceValueDisplay" style="color: #f9442c;" class="font-semibold">0%</span></p>
-                            <div class="mt-2">
-                                <input id="ceSlider" type="range" min="0" max="100" step="1" value="0" class="slider-track" />
+                            <div class="mt-4">
+                                <input id="ceSlider" type="range" min="0" max="100" step="1" value="50" class="slider-track" />
+                            </div>
+                             <div class="flex justify-between text-xs mt-2">
+                                <div class="text-left">
+                                    <p class="opacity-90 font-sans leading-tight">% de horas</p>
+                                    <p class="opacity-90 font-sans text-[11px] leading-tight">resolviendo por otros:</p>
+                                    <p><span id="ceValueDisplay" style="color: #f9442c;" class="font-semibold text-lg">50%</span></p>
+                                </div>
+                                <div class="text-right">
+                                    <p class="opacity-80 font-sans leading-tight">% de horas</p>
+                                    <p class="opacity-80 font-sans text-[11px] leading-tight">en tu rol directivo:</p>
+                                    <p><span id="compCeDisplay" class="font-semibold text-lg">50%</span></p>
+                                </div>
                             </div>
                         </div>
                         <hr class="border-gray-200" />
                         <!-- SP Slider -->
                         <div>
                             <p class="text-base text-center font-medium font-serif mb-2">¿En qué proporción distribuyes tu tiempo entre tu negocio y familia?</p>
-                            <p id="compSpDisplay" class="text-xs mt-4 opacity-80 font-sans">% de horas de vida personal: <span class="font-semibold">100%</span></p>
-                            <p class="text-xs mt-1 opacity-90 font-sans">% de horas dedicadas al trabajo: <span id="spValueDisplay" style="color: #f9442c;" class="font-semibold">0%</span></p>
-                            <div class="mt-2">
-                                <input id="spSlider" type="range" min="0" max="100" step="1" value="0" class="slider-track" />
+                            <div class="mt-4">
+                                <input id="spSlider" type="range" min="0" max="100" step="1" value="50" class="slider-track" />
+                            </div>
+                            <div class="flex justify-between text-xs mt-2">
+                               <div class="text-left">
+                                    <p class="opacity-90 font-sans leading-tight">% de horas</p>
+                                    <p class="opacity-90 font-sans text-[11px] leading-tight">dedicadas al trabajo:</p>
+                                    <p><span id="spValueDisplay" style="color: #f9442c;" class="font-semibold text-lg">50%</span></p>
+                                </div>
+                               <div class="text-right">
+                                    <p class="opacity-80 font-sans leading-tight">% de horas</p>
+                                    <p class="opacity-80 font-sans text-[11px] leading-tight">de vida personal:</p>
+                                    <p><span id="compSpDisplay" class="font-semibold text-lg">50%</span></p>
+                                </div>
                             </div>
                             <p class="text-[11px] mt-1 opacity-70 font-sans italic">*Esta respuesta influye más en tu resultado final.</p>
                         </div>
@@ -104,35 +141,96 @@
                     <p>🥰 Disfruta a tu familia y tu vida</p>
                 </div>
             </div>
-            <button id="verResultadoBtn" class="w-full mt-6 inline-flex items-center justify-center rounded-md text-sm font-medium h-10 px-4 py-2" style="background-color: #f9442c; color: white;">Ver mi resultado</button>
+            <button id="verResultadoBtn" class="w-full mt-6 inline-flex items-center justify-center rounded-md text-sm font-medium h-10 px-4 py-2 disabled:opacity-50 disabled:cursor-not-allowed" style="background-color: #f9442c; color: white;" disabled>Ver mi resultado</button>
+            <p id="microcopy" class="text-xs text-center text-gray-500 mt-2">Mueve los 3 controles para activar tu resultado</p>
         </div>
 
         <!-- Result View (hidden by default) -->
         <div id="result-view" class="hidden">
              <div class="border bg-white text-gray-800 shadow-sm rounded-lg text-center">
-                <div class="p-6 space-y-2">
-                    <h2 id="resultTitulo" class="text-2xl font-bold font-serif" style="color: #f9442c;"></h2>
-                    <p class="text-sm text-gray-600">Nivel de Esclavitud al Negocio (NEN): <strong id="resultNen" class="text-black"></strong></p>
-                    <p id="resultMensaje" class="font-semibold pt-2"></p>
-                    <img src="https://raw.githubusercontent.com/daniel-hd-91-mx/mp-des/main/comparte.png" alt="Comparte tu resultado" class="mx-auto w-[250px] pt-2">
+                 <div class="p-6 space-y-2">
+                     <h2 id="resultTitulo" class="text-2xl font-bold font-serif" style="color: #f9442c;"></h2>
+                     <p class="text-sm text-gray-600">Nivel de Esclavitud al Negocio (NEN): <strong id="resultNen" class="text-black"></strong></p>
+                     <p id="resultMensaje" class="font-semibold pt-2"></p>
+                     <img src="https://raw.githubusercontent.com/daniel-hd-91-mx/mp-des/main/comparte.png" alt="Comparte tu resultado" class="mx-auto w-[250px] pt-2">
+                 </div>
+             </div>
+             <div class="space-y-3 pt-4">
+                 <button id="downloadPdfBtn" class="w-full inline-flex items-center justify-center rounded-md text-sm font-medium h-10 px-4 py-2" style="background-color: #f9442c; color: white;">Descargar mi Mapa Personalizado</button>
+                 <a href="https://www.instagram.com/coach.danhd" target="_blank" class="w-full inline-flex items-center justify-center rounded-md text-sm font-medium h-10 px-4 py-2 bg-black text-white hover:bg-gray-800">Enviar DM</a>
+                 <button id="resetBtn" class="w-full bg-transparent text-gray-800 border border-gray-300 hover:bg-gray-100 inline-flex items-center justify-center rounded-md text-sm font-medium h-10 px-4 py-2">Reiniciar actividad</button>
+             </div>
+             <p class="text-xs text-center text-gray-500 mt-4">No guardo tus respuestas. Puedes descargar tu PDF y cerrar la ventana.</p>
+        </div>
+    </div>
+
+    <!-- Info Modal -->
+    <div id="infoModal" class="fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-lg shadow-xl w-full max-w-lg max-h-full overflow-y-auto">
+            <div class="p-6 relative">
+                <button id="closeModalBtn" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+                <h2 class="text-2xl font-bold font-serif text-center mb-4">Guía de uso — “Mapa Rápido para Salir de la Zona de Desgaste”</h2>
+                <div class="text-sm text-gray-700 space-y-4 font-sans">
+                    <div>
+                        <h3 class="font-bold text-base mb-1">1) Qué es</h3>
+                        <p>La <strong class="font-semibold">zona de desgaste</strong> es el inicio de la esclavitud con tu negocio. Ya no diriges: sobrevives. Las urgencias controlan tu agenda, haces tareas que no son tuyas y sacrificas tu vida personal creyendo que todo depende de ti. Detectarla a tiempo te permite romper ese patrón y volver a liderar con claridad.</p>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-base mb-1">2) Cómo usarla</h3>
+                        <ul class="list-disc list-inside space-y-1">
+                            <li>Mueve los tres controles según tus últimos 3 meses.</li>
+                            <li>Activa el botón <strong class="font-semibold">“Ver mi resultado”</strong> cuando los tres estén ajustados.</li>
+                            <li>Lee tu nivel de <strong class="font-semibold">Esclavitud al Negocio</strong> y el mensaje clave.</li>
+                            <li>Descarga tu PDF con el plan rápido.</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-base mb-1">3) Qué mide cada pregunta</h3>
+                         <ul class="list-disc list-inside space-y-1">
+                            <li>¿Qué tanto tus urgencias desplazan tu rol de dirección?</li>
+                            <li>¿Qué tanto resuelves problemas de otros en lugar de liderar?</li>
+                            <li>¿Qué tanto tu tiempo se inclina hacia el trabajo y no hacia tu vida personal?</li>
+                            <li class="list-none text-xs italic ml-4">(Esta última pesa más en el resultado final).</li>
+                        </ul>
+                    </div>
+                     <div>
+                        <h3 class="font-bold text-base mb-1">4) Guardar o compartir</h3>
+                        <ul class="list-disc list-inside space-y-1">
+                            <li><strong class="font-semibold">Descargar resultados:</strong> crea tu PDF con tu Mapa Rápido.</li>
+                            <li><strong class="font-semibold">Enviar DM:</strong> abre Instagram para compartirme tu resultado y conversar sobre tus siguientes pasos.</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-base mb-1">5) Privacidad</h3>
+                        <p>No guardo tus respuestas en el servidor. El PDF es solo tuyo.</p>
+                    </div>
+                     <div>
+                        <h3 class="font-bold text-base mb-1">6) Problemas frecuentes</h3>
+                        <ul class="list-disc list-inside space-y-1">
+                            <li><strong class="font-semibold">No se activa “Ver mi resultado”:</strong> mueve los tres controles al menos una vez.</li>
+                            <li><strong class="font-semibold">El PDF no descarga:</strong> espera a que aparezca activo el botón y vuelve a intentar.</li>
+                        </ul>
+                    </div>
                 </div>
             </div>
-            <div class="space-y-3 pt-4">
-                <button id="downloadPdfBtn" class="w-full inline-flex items-center justify-center rounded-md text-sm font-medium h-10 px-4 py-2" style="background-color: #f9442c; color: white;">Descargar mi Mapa Personalizado</button>
-                <button id="resetBtn" class="w-full bg-transparent text-gray-800 border border-gray-300 hover:bg-gray-100 inline-flex items-center justify-center rounded-md text-sm font-medium h-10 px-4 py-2">Reiniciar actividad</button>
-            </div>
         </div>
-
     </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             // --- State Variables ---
-            let arc = 0;
-            let ce = 0;
-            let sp = 0;
+            let arc = 50;
+            let ce = 50;
+            let sp = 50;
             let result = null;
             let jsPdfLoaded = false;
+            let sliderInteracted = {
+                arc: false,
+                ce: false,
+                sp: false
+            };
             const LOGO = "https://raw.githubusercontent.com/daniel-hd-91-mx/mp-des/main/Logo-Dan-Hd_Imagotipo-BLACK.png";
             const SHARE_IMG = "https://raw.githubusercontent.com/daniel-hd-91-mx/mp-des/main/comparte.png";
 
@@ -148,13 +246,18 @@
             const ceValueDisplay = document.getElementById('ceValueDisplay');
             const spValueDisplay = document.getElementById('spValueDisplay');
 
-            const compArcDisplay = document.getElementById('compArcDisplay').querySelector('span');
-            const compCeDisplay = document.getElementById('compCeDisplay').querySelector('span');
-            const compSpDisplay = document.getElementById('compSpDisplay').querySelector('span');
+            const compArcDisplay = document.getElementById('compArcDisplay');
+            const compCeDisplay = document.getElementById('compCeDisplay');
+            const compSpDisplay = document.getElementById('compSpDisplay');
             
             const verResultadoBtn = document.getElementById('verResultadoBtn');
             const downloadPdfBtn = document.getElementById('downloadPdfBtn');
             const resetBtn = document.getElementById('resetBtn');
+            const microcopy = document.getElementById('microcopy');
+
+            const infoIcon = document.getElementById('infoIcon');
+            const infoModal = document.getElementById('infoModal');
+            const closeModalBtn = document.getElementById('closeModalBtn');
 
             // --- Load jsPDF ---
             const script = document.createElement('script');
@@ -164,6 +267,16 @@
             document.body.appendChild(script);
 
             // --- Functions ---
+            const checkButtonState = () => {
+                if (sliderInteracted.arc && sliderInteracted.ce && sliderInteracted.sp) {
+                    verResultadoBtn.disabled = false;
+                    microcopy.style.display = 'none';
+                } else {
+                    verResultadoBtn.disabled = true;
+                    microcopy.style.display = 'block';
+                }
+            };
+
             const updateSliderTrack = (slider) => {
                 const percentage = ((slider.value - slider.min) * 100) / (slider.max - slider.min);
                 slider.style.background = `linear-gradient(to right, #f9442c ${percentage}%, #e5e7eb ${percentage}%)`;
@@ -172,6 +285,24 @@
             const clasificar = (arc, ce, sp, nen) => {
                 const highs = [arc, ce, sp].filter(v => v >= 70).length;
 
+                // Casos límite nuevos
+                if (sp < 30 && arc < 40 && ce < 40) {
+                    return {
+                        titulo: "Liderazgo en Riesgo",
+                        mensaje: "Al bajar demasiado el trabajo, el negocio pierde pulso. Equilibra sin soltar el timón.",
+                        detalle: "Has logrado un gran balance personal, pero es crucial asegurar que las áreas clave del negocio no queden desatendidas. El liderazgo libre requiere supervisión activa, no ausencia."
+                    };
+                }
+                
+                if (arc < 40 && ce >= 70) {
+                     return {
+                        titulo: "Delegación Inconsistente",
+                        mensaje: "Evitas las urgencias, pero sigues resolviendo por otros. Es control disfrazado de orden.",
+                        detalle: "Aunque no vives en modo 'bombero', tu equipo aún depende de ti para resolver sus problemas. Esto crea un cuello de botella y limita su crecimiento."
+                    };
+                }
+
+                // Lógica original
                 if (nen >= 70 || highs >= 2 || (sp >= 70 && arc >= 60)) {
                     return {
                     titulo: "Esclavitud Crítica",
@@ -324,11 +455,32 @@
                 y += rectH + 24;
 
                 const shareImgWidth = 250;
+                const shareImgHeight = 250; // The image is square (1080x1080)
                 const shareImgX = (pageW - shareImgWidth) / 2;
-                if (y + 100 > doc.internal.pageSize.getHeight() - 64) { doc.addPage(); y = 64; }
+                if (y + shareImgHeight > doc.internal.pageSize.getHeight() - 64) { doc.addPage(); y = 64; }
                 try {
-                    doc.addImage(SHARE_IMG, "PNG", shareImgX, y, shareImgWidth, 0, undefined, 'FAST');
+                    doc.addImage(SHARE_IMG, "PNG", shareImgX, y, shareImgWidth, shareImgHeight, undefined, 'FAST');
                 } catch (e) { console.error("Error loading share image for PDF:", e); }
+                y += shareImgHeight + 24;
+
+                const dmText = "Enviar DM";
+                const dmUrl = "https://www.instagram.com/coach.danhd";
+                doc.setFontSize(12);
+                doc.setFont('helvetica', 'bold');
+                const dmTextWidth = doc.getStringUnitWidth(dmText) * doc.getFontSize();
+                const dmButtonWidth = dmTextWidth + 60;
+                const dmButtonHeight = 30;
+                const dmButtonX = (pageW - dmButtonWidth) / 2;
+                if (y + dmButtonHeight > doc.internal.pageSize.getHeight() - 64) { doc.addPage(); y = 64; }
+                doc.setFillColor(0, 0, 0);
+                doc.roundedRect(dmButtonX, y, dmButtonWidth, dmButtonHeight, 8, 8, 'F');
+                doc.setTextColor(255, 255, 255);
+                const textY = y + (dmButtonHeight / 2) + (doc.getTextDimensions(dmText).h / 2) - 2;
+                doc.text(dmText, pageW / 2, textY, { align: 'center' });
+                doc.link(dmButtonX, y, dmButtonWidth, dmButtonHeight, { url: dmUrl });
+                doc.setTextColor(0, 0, 0);
+                doc.setFont('helvetica', 'normal');
+                y += dmButtonHeight + 24;
 
                 const totalPages = doc.internal.getNumberOfPages();
                 for (let i = 1; i <= totalPages; i++) {
@@ -337,31 +489,53 @@
                     doc.setTextColor(150);
                     const pageText = `${i} / ${totalPages}`;
                     const textX = pageW / 2;
-                    const textY = doc.internal.pageSize.getHeight() - 20;
-                    doc.text(pageText, textX, textY, { align: 'center' });
+                    const textY_footer = doc.internal.pageSize.getHeight() - 20;
+                    doc.text(pageText, textX, textY_footer, { align: 'center' });
                 }
 
                 doc.save("Mapa_Rapido_Zona_Desgaste.pdf");
             };
 
             // --- Event Listeners ---
+            infoIcon.addEventListener('click', () => {
+                infoModal.classList.remove('hidden');
+            });
+            closeModalBtn.addEventListener('click', () => {
+                infoModal.classList.add('hidden');
+            });
+            infoModal.addEventListener('click', (e) => {
+                if (e.target === infoModal) {
+                    infoModal.classList.add('hidden');
+                }
+            });
+
             arcSlider.addEventListener('input', (e) => {
-                arc = Number(e.target.value);
-                arcValueDisplay.textContent = `${arc}%`;
-                compArcDisplay.textContent = `${100 - arc}%`;
+                // The raw slider value (0=left, 100=right) is inverted
+                // so that moving the slider left increases the left value ("urgencias").
+                arc = 100 - Number(e.target.value);
+                arcValueDisplay.textContent = `${arc}%`; // Left label: Urgencies
+                compArcDisplay.textContent = `${100 - arc}%`; // Right label: Directive role
                 updateSliderTrack(e.target);
+                sliderInteracted.arc = true;
+                checkButtonState();
             });
             ceSlider.addEventListener('input', (e) => {
-                ce = Number(e.target.value);
-                ceValueDisplay.textContent = `${ce}%`;
-                compCeDisplay.textContent = `${100 - ce}%`;
+                // Invert for the same reason as above.
+                ce = 100 - Number(e.target.value);
+                ceValueDisplay.textContent = `${ce}%`; // Left label: Solving for others
+                compCeDisplay.textContent = `${100 - ce}%`; // Right label: Directive role
                 updateSliderTrack(e.target);
+                sliderInteracted.ce = true;
+                checkButtonState();
             });
             spSlider.addEventListener('input', (e) => {
-                sp = Number(e.target.value);
-                spValueDisplay.textContent = `${sp}%`;
-                compSpDisplay.textContent = `${100 - sp}%`;
+                // Invert for the same reason as above.
+                sp = 100 - Number(e.target.value);
+                spValueDisplay.textContent = `${sp}%`; // Left label: Work
+                compSpDisplay.textContent = `${100 - sp}%`; // Right label: Personal life
                 updateSliderTrack(e.target);
+                sliderInteracted.sp = true;
+                checkButtonState();
             });
             
             verResultadoBtn.addEventListener('click', () => {
@@ -379,18 +553,44 @@
             downloadPdfBtn.addEventListener('click', generarPDF);
 
             resetBtn.addEventListener('click', () => {
-                arc = 0; ce = 0; sp = 0; result = null;
-                arcSlider.value = 0; ceSlider.value = 0; spSlider.value = 0;
+                arc = 50; ce = 50; sp = 50; result = null;
+                arcSlider.value = 50; ceSlider.value = 50; spSlider.value = 50;
                 
-                arcSlider.dispatchEvent(new Event('input'));
-                ceSlider.dispatchEvent(new Event('input'));
-                spSlider.dispatchEvent(new Event('input'));
+                sliderInteracted.arc = false;
+                sliderInteracted.ce = false;
+                sliderInteracted.sp = false;
+
+                arcValueDisplay.textContent = `${arc}%`;
+                compArcDisplay.textContent = `${100 - arc}%`;
+                updateSliderTrack(arcSlider);
+
+                ceValueDisplay.textContent = `${ce}%`;
+                compCeDisplay.textContent = `${100 - ce}%`;
+                updateSliderTrack(ceSlider);
+                
+                spValueDisplay.textContent = `${sp}%`;
+                compSpDisplay.textContent = `${100 - sp}%`;
+                updateSliderTrack(spSlider);
+
+                checkButtonState();
                 
                 resultView.classList.add('hidden');
                 formView.classList.remove('hidden');
             });
             
-            // Initial slider track color
+            // --- Initial Setup on Load ---
+            arcSlider.value = arc;
+            ceSlider.value = ce;
+            spSlider.value = sp;
+
+            arcValueDisplay.textContent = `${arc}%`;
+            compArcDisplay.textContent = `${100-arc}%`;
+            ceValueDisplay.textContent = `${ce}%`;
+            compCeDisplay.textContent = `${100-ce}%`;
+            spValueDisplay.textContent = `${sp}%`;
+            compSpDisplay.textContent = `${100-sp}%`;
+            
+            checkButtonState();
             updateSliderTrack(arcSlider);
             updateSliderTrack(ceSlider);
             updateSliderTrack(spSlider);
